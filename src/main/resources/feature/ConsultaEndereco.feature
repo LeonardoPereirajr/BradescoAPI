@@ -4,7 +4,7 @@ Feature: Consulta de endereço
   Para que eu possa obter informações sobre o logradouro, bairro, cidade e estado
 
   Scenario: Consulta de endereço com CEP válido
-    Given que o usuário informou o CEP "01001000"
+    Given que o usuário informou o CEP "89035-490"
     When eu envio a requisição para a API
     Then eu devo receber um status code 200 OK
     And o endereço retornado deve conter as informações do logradouro, bairro, cidade e estado

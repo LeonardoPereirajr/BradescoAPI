@@ -4,7 +4,6 @@ import com.bradesco.api.controller.EnderecoController;
 import com.bradesco.api.model.ConsultaEnderecoRequest;
 import com.bradesco.api.model.Endereco;
 import com.bradesco.api.model.ViaCepResponse;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -14,29 +13,23 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Optional;
+
 @CucumberContextConfiguration
 @SpringBootTest
-public class ConsultaEnderecoStepDefinitions {
+public class StepDefinitions {
 
     private ConsultaEnderecoRequest request;
     private ResponseEntity<Endereco> response;
 
-    @Given("que o CEP {string} é válido")
-    public void queOCepÉVálido(String cep) {
+    @Given("que o usuário informou o CEP {string}")
+    public void que_o_usuário_informou_o_cep(String cep) {
         request = new ConsultaEnderecoRequest();
         request.setCep(cep);
-        request.isCepValido();
     }
 
-    @Given("que o CEP {string} é inválido")
-    public void queOCepÉInválido(String cep) {
-        request = new ConsultaEnderecoRequest();
-        request.setCep(cep);
-        request.isCepValido();
-    }
-
-    @When("o usuário consulta o endereço pelo CEP")
-    public void oUsuárioConsultaOEndereçoPeloCep() {
+    @When("eu envio a requisição para a API")
+    public void eu_envio_a_requisição_para_a_api() {
         EnderecoController controller = new EnderecoController();
         ViaCepResponse viaCepResponse = new ViaCepResponse();
         viaCepResponse.setCep("01001-000");
@@ -48,8 +41,13 @@ public class ConsultaEnderecoStepDefinitions {
         response = (ResponseEntity<Endereco>) controller.consultaEndereco(request);
     }
 
-    @Then("o sistema retorna o endereço")
-    public void oSistemaRetornaOEndereço() {
+    @Then("eu devo receber um status code {int} OK")
+    public void eu_devo_receber_um_status_code_ok(Integer statusCode) {
+        Assert.assertEquals(Optional.ofNullable(statusCode), response.getStatusCodeValue());
+    }
+
+    @Then("o endereço retornado deve conter as informações do logradouro, bairro, cidade e estado")
+    public void o_endereço_retornado_deve_conter_as_informações_do_logradouro_bairro_cidade_e_estado() {
         Assert.assertEquals("01001-000", response.getBody().getCep());
         Assert.assertEquals("Praça da Sé", response.getBody().getRua());
         Assert.assertEquals("Sé", response.getBody().getBairro());
@@ -58,15 +56,10 @@ public class ConsultaEnderecoStepDefinitions {
     }
 
     @Then("o sistema retorna uma mensagem de erro")
-    public void oSistemaRetornaUmaMensagemDeErro() {
+    public void o_sistema_retorna_uma_mensagem_de_erro() {
         Assert.assertNull(response.getBody());
         Assert.assertEquals(400, response.getStatusCodeValue());
     }
-    @And("Endereço deve retornar informaçoes")
-    public void oEndereçoRetornadoDeveConterAsInformaçõesDoLogradouroBairroCidadeEEstado() {
-        Assert.assertEquals("Praça da Sé", response.getBody().getRua());
-        Assert.assertEquals("Sé", response.getBody().getBairro());
-        Assert.assertEquals("São Paulo", response.getBody().getCidade());
-        Assert.assertEquals("SP", response.getBody().getEstado());
-    }
+
 }
+
