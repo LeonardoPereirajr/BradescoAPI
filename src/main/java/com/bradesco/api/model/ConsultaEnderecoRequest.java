@@ -18,5 +18,6 @@ public class ConsultaEnderecoRequest {
                 !cep.matches("(\\d)\\1{7,}") &&
                 !cep.matches("01234567|12345678|23456789");
     }
+
 }
 

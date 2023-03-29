@@ -22,7 +22,7 @@ public class EnderecoController {
     @PostMapping("/consulta-endereco")
     public ResponseEntity<?> consultaEndereco(@RequestBody ConsultaEnderecoRequest request) {
         String cep = request.getCep();
-        if (cep == null || !cep.matches("[0-9]{8}")) {
+        if (cep == null) {
             return ResponseEntity.badRequest().body("CEP inválido. O CEP deve conter 8 dígitos numéricos.");
         }
 
@@ -34,7 +34,7 @@ public class EnderecoController {
         } catch (HttpClientErrorException.NotFound e) {
             return ResponseEntity.notFound().build();
         } catch (RestClientException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao consultar o serviço ViaCEP");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao consultar o serviço ViaCEP");
         }
 
         if (viaCepResponse != null && viaCepResponse.getCep() != null) {
@@ -91,4 +91,11 @@ public class EnderecoController {
                 return 0.0;
         }
     }
+
+    public ViaCepResponse getViaCepResponse(String cep) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = URL_VIACEP + cep + "/json/";
+        return restTemplate.getForObject(url, ViaCepResponse.class);
+    }
+
 }

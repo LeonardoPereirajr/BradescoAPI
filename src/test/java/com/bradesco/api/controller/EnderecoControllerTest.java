@@ -17,12 +17,12 @@ public class EnderecoControllerTest {
 
     @Test
     void consultaEnderecoDeveRetornarEnderecoEValorDoFrete() throws Exception {
-        String cep = "01001-000";
-        String rua = "Praça da Sé";
-        String bairro = "Sé";
-        String cidade = "São Paulo";
-        String estado = "SP";
-        double frete = 7.85;
+        String cep = "89035-490";
+        String rua = "Rua Felipe Camarão";
+        String bairro = "Vila Nova";
+        String cidade = "Blumenau";
+        String estado = "SC";
+        double frete = 17.3;
 
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/consulta-endereco")
                         .contentType("application/json")
