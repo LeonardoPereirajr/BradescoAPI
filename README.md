@@ -28,12 +28,12 @@ RESPONSE
 
 Tecnologias utilizadas
 
-Java 11
-Spring boot
-API REST Template
-Documentação Swagger
-Testes unitários JUnit5
-Testes automatizados utilizando cucumber
+ - Java 11
+ - Spring boot
+ - API REST Template
+ - Documentação Swagger
+ - Testes unitários JUnit5
+ - Testes automatizados utilizando cucumber
 
 Autor
 | Leonardo Pereira | 
