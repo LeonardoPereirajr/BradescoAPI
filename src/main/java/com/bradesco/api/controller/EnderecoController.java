@@ -3,6 +3,7 @@ package com.bradesco.api.controller;
 import com.bradesco.api.model.ConsultaEnderecoRequest;
 import com.bradesco.api.model.Endereco;
 import com.bradesco.api.model.ViaCepResponse;
+import config.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +33,8 @@ public class EnderecoController {
         try {
             viaCepResponse = restTemplate.getForObject(url, ViaCepResponse.class);
         } catch (HttpClientErrorException.NotFound e) {
-            return ResponseEntity.notFound().build();
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), "CEP não encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         } catch (RestClientException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao consultar o serviço ViaCEP");
         }
